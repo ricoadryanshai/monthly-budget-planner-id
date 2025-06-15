@@ -1,11 +1,9 @@
-
 import React from 'react';
 import IncomeInput from './IncomeInput';
 import AllocationSliders from './AllocationSliders';
 import ExpenseList from './ExpenseList';
 import Summary from './Summary';
 import { Home, ShoppingBag, PiggyBank } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
 
 const BudgetPlanner: React.FC = () => {
   return (
@@ -15,7 +13,6 @@ const BudgetPlanner: React.FC = () => {
           <h1 className="text-4xl font-bold tracking-tight">Perencana Keuangan Bulanan</h1>
           <p className="text-muted-foreground">Atur pemasukan Anda dengan metode 50/30/20.</p>
         </div>
-        <ThemeToggle />
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
