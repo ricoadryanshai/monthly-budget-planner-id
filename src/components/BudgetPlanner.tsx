@@ -4,14 +4,12 @@ import AllocationSliders from './AllocationSliders';
 import ExpenseList from './ExpenseList';
 import Summary from './Summary';
 import { Home, ShoppingBag, PiggyBank } from 'lucide-react';
-
 const BudgetPlanner: React.FC = () => {
-  return (
-    <div className="container mx-auto p-4 space-y-8">
+  return <div className="container mx-auto p-4 space-y-8">
       <header className="flex flex-col items-center gap-4 py-4 sm:flex-row sm:justify-between">
         <div className="text-center sm:text-left">
           <h1 className="text-4xl font-bold tracking-tight">Perencana Keuangan Bulanan</h1>
-          <p className="text-muted-foreground">Atur pemasukan Anda dengan metode 50/30/20.</p>
+          <p className="text-muted-foreground">Atur keuangan Anda dengan metode 50/30/20.</p>
         </div>
       </header>
 
@@ -30,8 +28,6 @@ const BudgetPlanner: React.FC = () => {
        <footer className="text-center text-sm text-muted-foreground py-4">
         Dibuat dengan ❤️ oleh Lovable.
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default BudgetPlanner;
