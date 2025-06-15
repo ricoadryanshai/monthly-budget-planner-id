@@ -23,6 +23,7 @@ const Summary = () => {
   const data = Object.entries(allocations).map(([key, value]) => ({
     name: categoryNames[key as Category],
     value: (income * value) / 100,
+    category: key as Category,
   }));
 
   return (
@@ -45,7 +46,7 @@ const Summary = () => {
                 label={(entry) => `${Math.round((entry.percent || 0) * 100)}%`}
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[entry.name.toLowerCase() as Category]} />
+                  <Cell key={`cell-${index}`} fill={COLORS[entry.category]} />
                 ))}
               </Pie>
               <Legend />
@@ -54,9 +55,9 @@ const Summary = () => {
         </div>
         <div className="w-full md:w-1/2 space-y-4">
           {data.map(item => (
-            <div key={item.name} className="flex justify-between items-center p-3 rounded-md" style={{backgroundColor: `${COLORS[item.name.toLowerCase() as Category]}20`}}>
-              <span className="font-medium" style={{color: COLORS[item.name.toLowerCase() as Category]}}>{item.name}</span>
-              <span className="font-bold text-lg" style={{color: COLORS[item.name.toLowerCase() as Category]}}>{formatCurrency(item.value)}</span>
+            <div key={item.name} className="flex justify-between items-center p-3 rounded-md" style={{backgroundColor: `${COLORS[item.category]}20`}}>
+              <span className="font-medium" style={{color: COLORS[item.category]}}>{item.name}</span>
+              <span className="font-bold text-lg" style={{color: COLORS[item.category]}}>{formatCurrency(item.value)}</span>
             </div>
           ))}
             <div className="flex justify-between items-center p-3 rounded-md bg-gray-100">
