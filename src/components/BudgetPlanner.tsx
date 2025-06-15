@@ -9,7 +9,7 @@ const BudgetPlanner: React.FC = () => {
       <header className="flex flex-col items-center gap-4 py-4 sm:flex-row sm:justify-between">
         <div className="text-center sm:text-left">
           <h1 className="text-4xl font-bold tracking-tight">Perencana Keuangan Bulanan</h1>
-          <p className="text-muted-foreground">Atur keuangan Anda dengan metode 50/30/20.</p>
+          <p className="text-muted-foreground">Atur keuangan Anda berdasarkan metode 50/30/20.</p>
         </div>
       </header>
 
