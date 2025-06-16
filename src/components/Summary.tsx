@@ -1,6 +1,6 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
-import { useBudgetStore } from '@/hooks/useBudgetStore';
+import { useBudgetDatabase } from '@/hooks/useBudgetDatabase';
 import { formatCurrency } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Category } from '@/types';
@@ -18,7 +18,7 @@ const categoryNames: Record<Category, string> = {
 }
 
 const Summary = () => {
-  const { income, allocations } = useBudgetStore();
+  const { income, allocations } = useBudgetDatabase();
 
   const data = Object.entries(allocations).map(([key, value]) => ({
     name: categoryNames[key as Category],
@@ -60,10 +60,10 @@ const Summary = () => {
               <span className="font-bold text-lg" style={{color: COLORS[item.category]}}>{formatCurrency(item.value)}</span>
             </div>
           ))}
-            <div className="flex justify-between items-center p-3 rounded-md bg-gray-100">
-              <span className="font-medium text-gray-700">Total Pemasukan</span>
-              <span className="font-bold text-lg text-gray-900">{formatCurrency(income)}</span>
-            </div>
+          <div className="flex justify-between items-center p-3 rounded-md bg-gray-100">
+            <span className="font-medium text-gray-700">Total Pemasukan</span>
+            <span className="font-bold text-lg text-gray-900">{formatCurrency(income)}</span>
+          </div>
         </div>
       </CardContent>
     </Card>

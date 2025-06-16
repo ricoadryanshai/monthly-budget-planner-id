@@ -1,13 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { useBudgetStore } from '@/hooks/useBudgetStore';
+import { useBudgetDatabase } from '@/hooks/useBudgetDatabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 
 const AllocationSliders = () => {
-  const { allocations, setAllocations } = useBudgetStore();
+  const { income, allocations, saveBudget } = useBudgetDatabase();
   const [localAllocations, setLocalAllocations] = useState(allocations);
 
   useEffect(() => {
@@ -20,7 +19,6 @@ const AllocationSliders = () => {
 
     if (total > 100) {
       const diff = total - 100;
-      // Reduce other sliders proportionally
       const otherCategories = (['needs', 'wants', 'savings'] as const).filter(c => c !== category);
       let remainingDiff = diff;
 
@@ -38,14 +36,13 @@ const AllocationSliders = () => {
   const handleCommit = () => {
     const total = localAllocations.needs + localAllocations.wants + localAllocations.savings;
     if (total !== 100) {
-        // simple auto-balance, adds/removes diff to/from savings
-        const diff = 100 - total;
-        const balancedAllocations = {...localAllocations, savings: localAllocations.savings + diff};
-        setAllocations(balancedAllocations);
+      const diff = 100 - total;
+      const balancedAllocations = {...localAllocations, savings: localAllocations.savings + diff};
+      saveBudget(income, balancedAllocations);
     } else {
-        setAllocations(localAllocations);
+      saveBudget(income, localAllocations);
     }
-  }
+  };
 
   return (
     <Card>
@@ -101,9 +98,9 @@ const AllocationSliders = () => {
             className="[&>span:first-child]:bg-savings"
           />
         </div>
-        { (localAllocations.needs + localAllocations.wants + localAllocations.savings) !== 100 &&
-            <div className="text-center text-sm text-destructive font-semibold">Total alokasi harus 100%</div>
-        }
+        {(localAllocations.needs + localAllocations.wants + localAllocations.savings) !== 100 && (
+          <div className="text-center text-sm text-destructive font-semibold">Total alokasi harus 100%</div>
+        )}
       </CardContent>
     </Card>
   );

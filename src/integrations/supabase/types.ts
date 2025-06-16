@@ -9,7 +9,115 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      budgets: {
+        Row: {
+          allocation_needs: number
+          allocation_savings: number
+          allocation_wants: number
+          created_at: string
+          id: string
+          income: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allocation_needs?: number
+          allocation_savings?: number
+          allocation_wants?: number
+          created_at?: string
+          id?: string
+          income?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allocation_needs?: number
+          allocation_savings?: number
+          allocation_wants?: number
+          created_at?: string
+          id?: string
+          income?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          budget_id: string
+          category: string
+          created_at: string
+          id: string
+          name: string
+          paid: boolean
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          budget_id: string
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+          paid?: boolean
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          budget_id?: string
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          paid?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
