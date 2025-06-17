@@ -1,17 +1,19 @@
-
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { Allocation, Expense, Category } from '@/types';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { Allocation, Expense, Category } from "@/types";
 
 interface BudgetState {
   income: number;
   setIncome: (income: number) => void;
-  
+
   allocations: Allocation;
   setAllocations: (allocations: Allocation) => void;
 
   expenses: Record<Category, Expense[]>;
-  addExpense: (category: Category, expense: Omit<Expense, 'id' | 'paid'>) => void;
+  addExpense: (
+    category: Category,
+    expense: Omit<Expense, "id" | "paid">
+  ) => void;
   updateExpense: (category: Category, expense: Expense) => void;
   removeExpense: (category: Category, expenseId: string) => void;
   toggleExpensePaid: (category: Category, expenseId: string) => void;
@@ -20,7 +22,7 @@ interface BudgetState {
 export const useBudgetStore = create<BudgetState>()(
   persist(
     (set) => ({
-      income: 5000000,
+      income: 0,
       setIncome: (income) => set({ income }),
 
       allocations: {
@@ -76,7 +78,7 @@ export const useBudgetStore = create<BudgetState>()(
         })),
     }),
     {
-      name: 'budget-storage',
+      name: "budget-storage",
       storage: createJSONStorage(() => localStorage),
     }
   )
