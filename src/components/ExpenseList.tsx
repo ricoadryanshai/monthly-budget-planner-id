@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useBudgetDatabase } from '@/hooks/useBudgetDatabase';
+import { useBudgetStore } from '@/hooks/useBudgetStore';
 import { formatCurrency } from '@/lib/utils';
 import { Category, Expense } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -23,8 +23,14 @@ const categoryColors: Record<Category, string> = {
   savings: "bg-savings/10 text-savings border-savings/20",
 };
 
+const categoryProgressColors: Record<Category, string> = {
+  needs: "fill-needs",
+  wants: "fill-wants",
+  savings: "fill-savings",
+}
+
 const ExpenseList: React.FC<ExpenseListProps> = ({ category, title, icon }) => {
-  const { income, allocations, expenses, addExpense, updateExpense, removeExpense, toggleExpensePaid } = useBudgetDatabase();
+  const { income, allocations, expenses, addExpense, updateExpense, removeExpense, toggleExpensePaid } = useBudgetStore();
   const [newItemName, setNewItemName] = useState('');
   const [newItemAmount, setNewItemAmount] = useState<number | undefined>(undefined);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
@@ -47,7 +53,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ category, title, icon }) => {
       updateExpense(category, editingExpense);
       setEditingExpense(null);
     }
-  };
+  }
 
   return (
     <Card className={categoryColors[category]}>
@@ -103,13 +109,13 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ category, title, icon }) => {
       <CardFooter className="flex gap-2">
         <Input placeholder="Nama item" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} />
         <CurrencyInput
-          placeholder="Jumlah (Rp)"
-          value={newItemAmount}
-          onValueChange={(value) => setNewItemAmount(Number(value) || undefined)}
-          className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          prefix="Rp "
-          groupSeparator="."
-          decimalSeparator=","
+            placeholder="Jumlah (Rp)"
+            value={newItemAmount}
+            onValueChange={(value) => setNewItemAmount(Number(value) || undefined)}
+            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            prefix="Rp "
+            groupSeparator="."
+            decimalSeparator=","
         />
         <Button onClick={handleAddExpense} size="icon"><PlusCircle size={20}/></Button>
       </CardFooter>
