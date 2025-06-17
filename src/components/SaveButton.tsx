@@ -27,6 +27,9 @@ const SaveButton = () => {
         return;
       }
 
+      console.log('Saving budget for user:', user.id);
+      console.log('Budget data:', { income, allocations, expenses });
+
       // Save or update budget
       const { data: budget, error: budgetError } = await supabase
         .from('budgets')
@@ -36,31 +39,67 @@ const SaveButton = () => {
           allocation_needs: allocations.needs,
           allocation_wants: allocations.wants,
           allocation_savings: allocations.savings,
+        }, {
+          onConflict: 'user_id'
         })
         .select()
         .single();
 
-      if (budgetError) throw budgetError;
+      if (budgetError) {
+        console.error('Budget error:', budgetError);
+        throw budgetError;
+      }
 
-      // Delete existing expenses for this budget
-      await supabase
+      console.log('Budget saved:', budget);
+
+      // Delete existing expenses for this budget to avoid conflicts
+      const { error: deleteError } = await supabase
         .from('expenses')
         .delete()
         .eq('budget_id', budget.id);
 
-      // Save all expenses
+      if (deleteError) {
+        console.error('Delete expenses error:', deleteError);
+        throw deleteError;
+      }
+
+      // Prepare all expenses with proper budget_id
       const allExpenses = [
-        ...expenses.needs.map(exp => ({ ...exp, category: 'needs', budget_id: budget.id })),
-        ...expenses.wants.map(exp => ({ ...exp, category: 'wants', budget_id: budget.id })),
-        ...expenses.savings.map(exp => ({ ...exp, category: 'savings', budget_id: budget.id })),
+        ...expenses.needs.map(exp => ({ 
+          name: exp.name,
+          amount: exp.amount,
+          paid: exp.paid,
+          category: 'needs', 
+          budget_id: budget.id 
+        })),
+        ...expenses.wants.map(exp => ({ 
+          name: exp.name,
+          amount: exp.amount,
+          paid: exp.paid,
+          category: 'wants', 
+          budget_id: budget.id 
+        })),
+        ...expenses.savings.map(exp => ({ 
+          name: exp.name,
+          amount: exp.amount,
+          paid: exp.paid,
+          category: 'savings', 
+          budget_id: budget.id 
+        })),
       ];
 
+      console.log('Expenses to save:', allExpenses);
+
+      // Save all expenses if there are any
       if (allExpenses.length > 0) {
         const { error: expensesError } = await supabase
           .from('expenses')
           .insert(allExpenses);
 
-        if (expensesError) throw expensesError;
+        if (expensesError) {
+          console.error('Expenses error:', expensesError);
+          throw expensesError;
+        }
       }
 
       setSaved(true);
@@ -75,7 +114,7 @@ const SaveButton = () => {
       console.error('Error saving budget:', error);
       toast({
         title: "Error",
-        description: "Gagal menyimpan budget. Silakan coba lagi.",
+        description: `Gagal menyimpan budget: ${error.message || 'Silakan coba lagi.'}`,
         variant: "destructive",
       });
     } finally {
